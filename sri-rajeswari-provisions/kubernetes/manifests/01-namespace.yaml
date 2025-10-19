@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sri-rajeswari-provisions
+  labels:
+    project: sri-rajeswari-provisions
+    environment: production

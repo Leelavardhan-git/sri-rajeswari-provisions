@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: sri-rajeswari-provisions
+data:
+  DATABASE_URL: "postgresql://user:pass@db-host:5432/srirajeswariprovisions"
+  ENVIRONMENT: "production"

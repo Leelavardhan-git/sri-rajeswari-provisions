@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard
+  namespace: monitoring
+data:
+  dashboard.json: |-
+    {
+      "dashboard": {
+        "title": "Sri Rajeswari Provisions",
+        "panels": []
+      }
+    }
