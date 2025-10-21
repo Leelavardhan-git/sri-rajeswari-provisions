@@ -136,7 +136,7 @@ text
 ### Local Development
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/sri-rajeswari-provisions.git
+git clone https://github.com/Leelavardhan-git/sri-rajeswari-provisions.git
 cd sri-rajeswari-provisions
 
 # 2. Start all services locally using Make
@@ -638,5 +638,5 @@ Issues: GitHub Issues
 
 Discussions: GitHub Discussions
 
-Email: your-email@example.com
+Email: mleelavardhan@gmail.com
 
