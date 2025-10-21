@@ -21,154 +21,219 @@ Sri Rajeswari Provisions is a complete DevOps demonstration project that showcas
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TB
-    A[React Frontend] --> B[NGINX Ingress]
-    B --> C[API Gateway]
-    C --> D[Inventory Service]
-    C --> E[Sales Service]
-    C --> F[Customer Service]
-    C --> G[Payment Service]
-    C --> H[Notification Service]
-    D --> I[(PostgreSQL)]
-    E --> I
-    F --> I
-    G --> I
-    
-    J[Prometheus] --> K[Grafana]
-    L[ELK Stack] --> M[Kibana]
-    N[GitHub Actions] --> O[AWS ECR]
-    O --> P[AWS EKS]
-    P --> Q[Helm Charts]
-🛠️ Technology Stack
-🔧 Core Technologies
-Frontend: React 18, Vite, Chart.js
+### System Architecture Diagram
+┌─────────────────┐ ┌──────────────────┐ ┌─────────────────┐
+│ React │ │ NGINX │ │ API Gateway │
+│ Frontend │────│ Ingress │────│ / Router │
+└─────────────────┘ └──────────────────┘ └─────────────────┘
+│
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│ Inventory │ │ Sales │ │ Customer │ │ Payment │
+│ Service │ │ Service │ │ Service │ │ Service │
+└─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘
+│ │ │ │
+└───────────────────┼──────────────────┼──────────────────┘
+│ │
+┌──────────┴──────────────────┴──────────┐
+│ PostgreSQL Database │
+└────────────────────────────────────────┘
 
-Backend: Python FastAPI, SQLAlchemy
+┌─────────────────┐ ┌──────────────────┐ ┌─────────────────┐
+│ Prometheus │ │ Grafana │ │ ELK Stack │
+│ Monitoring │────│ Dashboard │ │ Logging │
+└─────────────────┘ └──────────────────┘ └─────────────────┘
 
-Database: PostgreSQL
+┌─────────────────┐ ┌──────────────────┐ ┌─────────────────┐
+│ GitHub Actions │ │ AWS ECR │ │ AWS EKS │
+│ CI/CD │────│ Container Registry │──│ Kubernetes │
+└─────────────────┘ └──────────────────┘ └─────────────────┘
 
-Containerization: Docker
-
-Orchestration: Kubernetes, Helm
-
-Infrastructure: Terraform, AWS
-
-☁️ Cloud & DevOps
-Cloud Provider: AWS (EKS, ECR, RDS, VPC)
-
-CI/CD: GitHub Actions, Docker
-
-Monitoring: Prometheus, Grafana, ELK Stack
-
-Security: SonarQube, Trivy
-
-GitOps: ArgoCD
-
-Service Mesh: Istio (Optional)
-
-📁 Project Structure
 text
+
+### Data Flow
+1. **Frontend** (React) → **Ingress** → **Microservices** → **Database**
+2. **CI/CD Pipeline** → **Container Registry** → **Kubernetes Cluster**
+3. **Applications** → **Monitoring Stack** → **Dashboards & Alerts**
+
+## 🛠️ Technology Stack
+
+### 🔧 Core Technologies
+- **Frontend**: React 18, Vite, Chart.js, Axios
+- **Backend**: Python FastAPI, SQLAlchemy, Pydantic
+- **Database**: PostgreSQL 15
+- **Containerization**: Docker, Docker Compose
+- **Orchestration**: Kubernetes, Helm
+- **Infrastructure**: Terraform, AWS Cloud
+
+### ☁️ Cloud & DevOps
+- **Cloud Provider**: AWS (EKS, ECR, RDS, VPC, IAM)
+- **CI/CD**: GitHub Actions, Docker Build & Push
+- **Monitoring**: Prometheus, Grafana, ELK Stack
+- **Security**: SonarQube, Trivy, SAST/DAST
+- **GitOps**: ArgoCD (Optional)
+- **Service Mesh**: Istio (Optional)
+
+### 🔐 Security & Quality
+- **Code Quality**: SonarQube, Pylint, ESLint
+- **Security Scanning**: Trivy, Snyk
+- **Secrets Management**: Kubernetes Secrets, AWS Secrets Manager
+- **Network Security**: VPC, Security Groups, Network Policies
+
+## 📁 Project Structure
 sri-rajeswari-provisions/
-├── 📁 .github/workflows/          # CI/CD Pipelines
-├── 📁 infrastructure/             # Terraform Configs
-├── 📁 microservices/              # Backend Services
-│   ├── 📁 inventory-service/      # Product & Stock Management
-│   ├── 📁 sales-service/          # Sales & Transactions
-│   ├── 📁 customer-service/       # Customer Management
-│   ├── 📁 payment-service/        # Payment Processing
-│   └── 📁 notification-service/   # Email/SMS Alerts
-├── 📁 frontend/                   # React Application
-├── 📁 kubernetes/                 # K8s Manifests & Helm
-├── 📁 monitoring/                 # Observability Stack
-├── 📁 database/                   # Schema & Migrations
-├── 📁 scripts/                    # Deployment Utilities
-├── 🐳 docker-compose.yml          # Local Development
-├── 📝 Makefile                    # Build Automation
-└── 📚 README.md                   # Documentation
-🚀 Quick Start
-Prerequisites
-Docker & Docker Compose
+├── 📁 .github/workflows/ # CI/CD Pipelines
+│ ├── ci-cd.yml # Main CI/CD workflow
+│ └── security-scan.yml # Security scanning
+├── 📁 infrastructure/ # Terraform Configurations
+│ ├── main.tf # Main Terraform config
+│ ├── variables.tf # Terraform variables
+│ ├── eks.tf # EKS cluster configuration
+│ ├── networking.tf # VPC and networking
+│ └── database.tf # RDS database setup
+├── 📁 microservices/ # Backend Microservices
+│ ├── 📁 inventory-service/ # Product & Stock Management
+│ ├── 📁 sales-service/ # Sales & Transactions
+│ ├── 📁 customer-service/ # Customer Management
+│ ├── 📁 payment-service/ # Payment Processing
+│ └── 📁 notification-service/ # Email/SMS Alerts
+├── 📁 frontend/ # React Application
+│ ├── src/
+│ │ ├── components/ # React components
+│ │ ├── pages/ # Application pages
+│ │ └── App.jsx # Main app component
+│ ├── package.json # Node.js dependencies
+│ └── Dockerfile # Frontend container
+├── 📁 kubernetes/ # Kubernetes Configuration
+│ ├── manifests/ # K8s YAML files
+│ ├── helm-chart/ # Helm charts
+│ └── argo-cd/ # GitOps configurations
+├── 📁 monitoring/ # Observability Stack
+│ ├── prometheus/ # Metrics collection
+│ ├── grafana/ # Dashboards
+│ └── elk/ # Logging stack
+├── 📁 database/ # Database Setup
+│ ├── init.sql # Database schema
+│ └── migrations/ # Database migrations
+├── 📁 scripts/ # Deployment Utilities
+│ ├── setup.sh # Initial setup
+│ ├── deploy.sh # Deployment script
+│ └── health-check.sh # Health checks
+├── 🐳 docker-compose.yml # Local Development
+├── 📝 Makefile # Build Automation
+└── 📚 README.md # Documentation
 
-Python 3.9+
+text
 
-Node.js 18+
+## 🚀 Quick Start
 
-AWS CLI (for production)
+### Prerequisites
+- **Docker** & **Docker Compose**
+- **Python 3.9+**
+- **Node.js 18+**
+- **AWS CLI** (for production deployment)
+- **kubectl** & **helm** (for Kubernetes deployment)
 
-kubectl & helm (for Kubernetes)
-
-Local Development
-bash
-# Clone the repository
+### Local Development
+```bash
+# 1. Clone the repository
 git clone https://github.com/yourusername/sri-rajeswari-provisions.git
 cd sri-rajeswari-provisions
 
-# Start all services locally
+# 2. Start all services locally using Make
 make deploy-local
 
 # Or use docker-compose directly
 docker-compose up -d
+
+# 3. View running services
+docker-compose ps
 Access Local Services
-Frontend: http://localhost:3000
+Service	URL	Description
+Frontend	http://localhost:3000	React application
+Inventory API	http://localhost:8001	Product management
+Sales API	http://localhost:8002	Sales transactions
+Customer API	http://localhost:8003	Customer management
+Payment API	http://localhost:8004	Payment processing
+Notification API	http://localhost:8005	Alerts & notifications
+PostgreSQL	localhost:5432	Database
+Sample Data
+The application comes pre-loaded with sample products for Sri Rajeswari Provisions:
 
-Inventory API: http://localhost:8001
+Rice & Grains: Basmati Rice (₹85/kg), Wheat Atta (₹45/kg)
 
-Sales API: http://localhost:8002
+Oils: Sunflower Oil (₹180/liter), Groundnut Oil
 
-Customer API: http://localhost:8003
+Pulses: Toor Dal (₹120/kg), Chana Dal
 
-Payment API: http://localhost:8004
+Daily Needs: Sugar (₹42/kg), Salt (₹18/kg), Tea Powder (₹150/kg)
 
-Notification API: http://localhost:8005
+Beverages: Coca-Cola (₹20/bottle), Milk (₹28/liter)
 
-PostgreSQL: localhost:5432
+Vegetables: Tomato (₹25/kg), Potato (₹20/kg), Onion (₹30/kg)
 
 🏗️ Infrastructure Setup
 AWS Infrastructure with Terraform
 bash
-# Initialize Terraform
+# Navigate to infrastructure directory
 cd infrastructure
+
+# Initialize Terraform
 terraform init
 
-# Plan infrastructure
+# Plan infrastructure deployment
 terraform plan
 
 # Deploy infrastructure
 terraform apply -auto-approve
+
+# Output will show EKS cluster info and database endpoints
 Kubernetes Deployment
 bash
-# Apply Kubernetes manifests
+# Apply all Kubernetes manifests
 make k8s-deploy
 
-# Or use kubectl directly
+# Or deploy manually
 kubectl apply -f kubernetes/manifests/
 
 # Verify deployment
 kubectl get pods -n sri-rajeswari-provisions
+kubectl get services -n sri-rajeswari-provisions
+
+# Check ingress
+kubectl get ingress -n sri-rajeswari-provisions
 🔄 CI/CD Pipeline
 GitHub Actions Workflows
-CI Pipeline: On every pull request
+Continuous Integration (CI)
+Trigger: On every pull request to main/develop
 
-Code quality checks
+Actions:
 
-Unit testing
+Code quality checks (SonarQube)
+
+Unit testing for all microservices
 
 Security scanning (Trivy)
 
-SonarQube analysis
-
-CD Pipeline: On main branch merge
-
 Docker image building
 
-ECR push
+Vulnerability scanning
 
-EKS deployment
+Continuous Deployment (CD)
+Trigger: On merge to main branch
 
-Smoke tests
+Actions:
 
-Manual Deployment
+Build and tag Docker images
+
+Push to AWS ECR
+
+Deploy to AWS EKS
+
+Run smoke tests
+
+Update deployment status
+
+Manual Deployment Commands
 bash
 # Build all services
 make build
@@ -176,111 +241,149 @@ make build
 # Run tests
 make test
 
-# Deploy to production
+# Deploy to Kubernetes
 make k8s-deploy
+
+# Clean up resources
+make clean
 📊 Monitoring & Observability
-Access Monitoring Stack
+Access Monitoring Stack Locally
 bash
-# Port forward to access locally
-kubectl port-forward -n monitoring svc/grafana 3000:3000
-kubectl port-forward -n monitoring svc/prometheus 9090:9090
-kubectl port-forward -n monitoring svc/kibana 5601:5601
-Monitoring URLs
-Grafana Dashboard: http://localhost:3000
+# Port forward monitoring services
+kubectl port-forward -n monitoring svc/grafana 3000:3000 &
+kubectl port-forward -n monitoring svc/prometheus 9090:9090 &
+kubectl port-forward -n monitoring svc/kibana 5601:5601 &
 
-Prometheus: http://localhost:9090
+# Access monitoring dashboards
+echo "Grafana: http://localhost:3000 (admin/admin)"
+echo "Prometheus: http://localhost:9090"
+echo "Kibana: http://localhost:5601"
+Monitoring URLs in Production
+Grafana Dashboard: http://grafana.yourdomain.com
 
-Kibana: http://localhost:5601
+Prometheus: http://prometheus.yourdomain.com
+
+Kibana: http://kibana.yourdomain.com
 
 Key Metrics Monitored
-Application performance (response times, error rates)
+Application Metrics: Response times, error rates, request volume
 
-Business metrics (sales, inventory levels)
+Business Metrics: Sales revenue, inventory levels, customer activity
 
-Infrastructure metrics (CPU, memory, disk)
+Infrastructure Metrics: CPU, memory, disk usage, network I/O
 
-Database performance
+Database Metrics: Query performance, connection pool, replication lag
 
 🗄️ Database Schema
-Core Tables
-products: Product catalog with pricing and stock levels
+Core Tables Structure
+sql
+-- Products table
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INTEGER NOT NULL,
+    min_stock_level INTEGER NOT NULL,
+    unit VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-sales: Transaction records with timestamps
+-- Sales table
+CREATE TABLE sales (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products(id),
+    quantity INTEGER NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    customer_id INTEGER,
+    sale_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-customers: Customer information and contact details
+-- Customers table
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) UNIQUE,
+    email VARCHAR(100),
+    address TEXT
+);
+🔐 Security Implementation
+Security Measures
+Container Security: Non-root users, minimal base images
 
-payments: Payment transaction records
+Network Security: VPC isolation, security groups, network policies
 
-inventory_logs: Stock change history
+Secrets Management: Kubernetes Secrets, environment variables
 
-Sample Data
-The application comes pre-loaded with sample products:
+API Security: Input validation, rate limiting, CORS configuration
 
-Rice & Grains: Basmati Rice, Wheat Atta
-
-Oils: Sunflower Oil, Groundnut Oil
-
-Pulses: Toor Dal, Chana Dal
-
-Daily Needs: Sugar, Salt, Tea Powder
-
-Beverages: Coca-Cola, Milk
-
-Vegetables: Tomato, Potato, Onion
-
-🔐 Security
-Implemented Security Measures
-Container Security: Non-root users in Docker
-
-Network Security: VPC, Security Groups, Network Policies
-
-Secrets Management: Kubernetes Secrets, AWS Secrets Manager
-
-SAST: SonarQube code analysis
-
-DAST: Trivy vulnerability scanning
-
-TLS/SSL: HTTPS enforcement
+TLS/SSL: HTTPS enforcement, certificate management
 
 Security Scanning
 bash
-# Run security scan
-docker run --rm -v $(pwd):/src aquasec/trivy:latest fs /src
+# Run container security scan
+docker scan sri-rajeswari-inventory-service
 
-# Code quality scan
-sonar-scanner
-🧪 Testing
-Test Structure
+# Run code security scan
+trivy fs .
+
+# Run dependency vulnerability check
+npm audit # for frontend
+pip audit # for backend
+🧪 Testing Strategy
+Test Pyramid
+text
+    /\    /\
+   /  \  /  \   E2E Tests (5%)
+  /    \/    \  Integration Tests (15%)
+ /____________\  Unit Tests (80%)
+Running Tests
 bash
 # Run all tests
 make test
 
-# Run specific service tests
+# Run backend tests
 cd microservices/inventory-service
 pytest tests/ -v
 
-# Frontend tests
+# Run frontend tests
 cd frontend
 npm test
+
+# Run integration tests
+docker-compose -f docker-compose.test.yml up
 Test Coverage
-Unit tests for all microservices
+Unit Tests: Individual functions and classes
 
-Integration tests for API endpoints
+Integration Tests: API endpoints and database interactions
 
-End-to-end tests for critical user journeys
+End-to-End Tests: Critical user journeys
 
-Performance and load testing
+Performance Tests: Load and stress testing
 
 📈 Performance & Scaling
 Horizontal Pod Autoscaling
 yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
+metadata:
+  name: inventory-service-hpa
+  namespace: sri-rajeswari-provisions
 spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inventory-service
   minReplicas: 2
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-Resource Limits
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+Resource Management
 yaml
 resources:
   requests:
@@ -291,189 +394,249 @@ resources:
     cpu: "200m"
 🔧 Configuration Management
 Environment Configuration
-Development: docker-compose.yml
+Development: docker-compose.yml, local environment variables
 
-Staging: values-staging.yaml
+Staging: values-staging.yaml, staging-specific configs
 
-Production: values-production.yaml
+Production: values-production.yaml, production secrets
 
-Feature Flags
-A/B testing capabilities
+Configuration Sources
+Environment Variables
 
-Gradual feature rollouts
+Kubernetes ConfigMaps
 
-Emergency kill switches
+Kubernetes Secrets
 
-🤝 API Documentation
+AWS Parameter Store (for production)
+
+Feature Flags for gradual rollouts
+
+🌐 API Documentation
 Available Endpoints
-Inventory Service: /products, /low-stock, /categories
+Inventory Service
+GET /products - List all products
 
-Sales Service: /sales, /sales/today
+GET /products/{id} - Get product details
 
-Customer Service: /customers
+PUT /products/{id}/stock - Update stock quantity
 
-Payment Service: /payments
+GET /low-stock - Get low stock alerts
+
+GET /categories - List product categories
+
+Sales Service
+POST /sales - Create new sale
+
+GET /sales - List sales
+
+GET /sales/today - Get today's sales summary
+
+Customer Service
+POST /customers - Create customer
+
+GET /customers - List customers
+
+GET /customers/{id} - Get customer details
 
 OpenAPI Documentation
-Each microservice provides automatic OpenAPI documentation at:
+Each microservice provides automatic API documentation:
 
 text
-http://service-host:port/docs
+http://inventory-service:8000/docs
+http://sales-service:8000/docs
+http://customer-service:8000/docs
 🚨 Alerting & Notifications
 Business Alerts
-Low stock notifications
+Low Stock Alerts: When product quantity ≤ min_stock_level
 
-High-value sales alerts
+High-Value Sales: Transactions above threshold
 
-Inventory discrepancy alerts
+Inventory Discrepancies: Unexpected stock changes
 
-Payment failure notifications
+Payment Failures: Failed transaction attempts
 
 Technical Alerts
-Service downtime
+Service Downtime: Health check failures
 
-High error rates
+High Error Rates: 5xx errors above threshold
 
-Resource utilization thresholds
+Resource Alerts: CPU/Memory/Disk usage
 
-Security incidents
+Security Incidents: Unauthorized access attempts
 
 📝 Development Guide
 Adding New Features
-Create feature branch from develop
+Create Feature Branch: git checkout -b feature/new-feature
 
-Implement changes with tests
+Implement Changes: Follow coding standards
 
-Update documentation
+Write Tests: Unit, integration, and e2e tests
 
-Create pull request
+Update Documentation: API docs, README updates
 
-Code review and merge
+Create PR: Request code review
+
+Merge: After approval and CI passing
 
 Code Standards
-Follow PEP 8 for Python
+Python: PEP 8, Black formatter, Pylint
 
-Use ESLint for JavaScript/React
+JavaScript: ESLint, Prettier
 
-Write comprehensive tests
+Commit Messages: Conventional commits
 
-Update API documentation
+Documentation: Inline comments, API docs
 
-Include meaningful commit messages
-
-🐛 Troubleshooting
-Common Issues
+🐛 Troubleshooting Guide
+Common Issues & Solutions
+Database Connection Issues
 bash
-# Check service status
-docker-compose ps
+# Check database status
+docker-compose ps postgres
+
+# View database logs
+docker-compose logs postgres
+
+# Test connection
+pg_isready -h localhost -p 5432
+Kubernetes Deployment Issues
+bash
+# Check pod status
 kubectl get pods -n sri-rajeswari-provisions
 
-# View logs
-docker-compose logs [service-name]
-kubectl logs -n sri-rajeswari-provisions [pod-name]
+# View pod logs
+kubectl logs -n sri-rajeswari-provisions <pod-name>
 
-# Database connectivity
-psql -h localhost -U provisions_admin -d srirajeswariprovisions
-Debug Commands
-bash
-# Kubernetes debugging
-kubectl describe pod [pod-name]
+# Describe pod for details
+kubectl describe pod -n sri-rajeswari-provisions <pod-name>
+
+# Check events
 kubectl get events --sort-by=.metadata.creationTimestamp
-
-# Network debugging
+Service Communication Issues
+bash
+# Test service connectivity
 kubectl run debug-pod --image=busybox --rm -it -- sh
-📊 Business Metrics & Analytics
-Key Performance Indicators
-Daily Sales Revenue
 
-Inventory Turnover Rate
+# Inside debug pod
+nslookup inventory-service
+telnet inventory-service 8000
+📊 Business Analytics
+Key Performance Indicators (KPIs)
+Daily Sales Revenue: Total sales per day
 
-Customer Acquisition Cost
+Inventory Turnover: How quickly stock sells
 
-Stockout Frequency
+Customer Retention: Repeat customer rate
 
-Average Transaction Value
+Stockout Frequency: How often products are unavailable
+
+Average Transaction Value: Revenue per sale
 
 Reporting Features
 Real-time sales dashboard
 
 Inventory valuation reports
 
-Customer purchase history
+Customer purchase patterns
 
 Seasonal trend analysis
 
-🌐 Production Deployment
-AWS Services Used
-EKS: Kubernetes cluster
+Profit margin calculations
 
-ECR: Container registry
+🚀 Production Deployment
+AWS Services Configuration
+EKS: Managed Kubernetes cluster
 
-RDS: PostgreSQL database
+ECR: Private container registry
 
-VPC: Network isolation
+RDS: PostgreSQL with read replicas
 
-ALB: Load balancing
+VPC: Isolated network with subnets
 
-CloudWatch: Logging and monitoring
+ALB: Application load balancer with SSL
+
+CloudWatch: Log aggregation and monitoring
+
+IAM: Role-based access control
 
 Deployment Checklist
-Infrastructure provisioned
+Infrastructure provisioned and tested
 
 Database migrations applied
 
-SSL certificates configured
+SSL certificates configured and valid
 
-Monitoring stack deployed
+Monitoring stack deployed and alerting configured
 
-Backup strategy implemented
+Backup and disaster recovery procedures tested
 
-Disaster recovery tested
+Performance testing completed
 
-🔄 Maintenance
-Regular Tasks
-Security patches updates
+Security audit passed
 
-Database backups verification
+🔄 Maintenance Procedures
+Regular Maintenance Tasks
+Weekly: Security patches, log rotation
 
-Log rotation and cleanup
+Monthly: Performance review, cost optimization
 
-Performance optimization
+Quarterly: Dependency updates, architecture review
 
-Cost optimization reviews
+Annually: Security audit, disaster recovery test
 
 Backup Strategy
 bash
 # Database backups
-pg_dump srirajeswariprovisions > backup.sql
+pg_dump -h $DB_HOST -U $DB_USER $DB_NAME > backup_$(date +%Y%m%d).sql
+
+# Kubernetes resource backups
+kubectl get all -n sri-rajeswari-provisions -o yaml > k8s-backup-$(date +%Y%m%d).yaml
 
 # Configuration backups
-kubectl get all -n sri-rajeswari-provisions -o yaml > k8s-backup.yaml
+terraform state pull > terraform-state-$(date +%Y%m%d).json
 🤝 Contributing
-We welcome contributions! Please see our Contributing Guide for details.
+We welcome contributions from the community! Please see our Contributing Guide for details.
 
-Development Setup
+Development Workflow
 Fork the repository
 
-Create a feature branch
+Create a feature branch (git checkout -b feature/amazing-feature)
 
-Make your changes
+Commit your changes (git commit -m 'Add some amazing feature')
 
-Add tests
+Push to the branch (git push origin feature/amazing-feature)
 
-Submit a pull request
+Open a Pull Request
+
+Code Review Process
+All PRs require at least one review
+
+CI must pass all checks
+
+Code coverage should not decrease
+
+Documentation must be updated
 
 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 🙏 Acknowledgments
-FastAPI team for the excellent web framework
+FastAPI Team for the excellent web framework
 
-Kubernetes community for container orchestration
+Kubernetes Community for container orchestration
 
-AWS for cloud infrastructure
+AWS for cloud infrastructure services
 
-React team for the frontend framework
+React Team for the frontend framework
+
+Prometheus & Grafana for monitoring solutions
 
 📞 Support
-For support, please open an issue in the GitHub repository or contact the maintainers.
+Documentation: GitHub Wiki
+
+Issues: GitHub Issues
+
+Discussions: GitHub Discussions
+
+Email: your-email@example.com
+
