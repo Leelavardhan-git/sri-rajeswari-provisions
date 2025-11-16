@@ -1,7 +1,7 @@
 resource "aws_ecr_repository" "microservices" {
   for_each = toset([
     "inventory-service",
-    "sales-service", 
+    "sales-service",
     "customer-service",
     "payment-service",
     "notification-service",
