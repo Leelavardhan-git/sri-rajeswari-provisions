@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
+    container_name: postgres
     environment:
       POSTGRES_DB: srirajeswariprovisions
       POSTGRES_USER: admin
@@ -14,16 +13,41 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   inventory-service:
-    build: ./microservices/inventory-service
+    build:
+      context: ./microservices/inventory-service
+    image: sri-rajeswari-provisions-inventory-service
+    container_name: inventory-service
     ports:
       - "8001:8000"
     environment:
       DATABASE_URL: postgresql://admin:password@postgres:5432/srirajeswariprovisions
+    depends_on:
+      - postgres
 
   sales-service:
-    build: ./microservices/sales-service
+    build:
+      context: ./microservices/sales-service
+    image: sri-rajeswari-provisions-sales-service
+    container_name: sales-service
     ports:
       - "8002:8000"
+    environment:
+      DATABASE_URL: postgresql://admin:password@postgres:5432/srirajeswariprovisions
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+    image: sri-rajeswari-provisions-frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - inventory-service
+      - sales-service
 
 volumes:
   postgres_data:
