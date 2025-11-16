@@ -1835,3 +1835,5 @@ make deploy-local
 
 # Kubernetes deployment
 make k8s-deploy
+
+EOF
